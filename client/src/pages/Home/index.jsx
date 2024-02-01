@@ -3,13 +3,21 @@ import {Button, Typography, Box} from "@mui/material";
 import styles from "./Home.module.scss";
 import {Modals} from "../../components";
 import { useState } from "react";
+import {useDispatch, useSelector} from "react-redux";
+import { isAuthSelector, logout } from "../../redux/slices/auth";
 
 const Home = () => {
-
-   const isAuth = false;
-   const userEmail = "as@asdsa.asd"
+   const dispatch = useDispatch();
+   const isAuth = useSelector(isAuthSelector);
+   const userEmail = useSelector((state) => state.auth.userEmail)
 
    const [showModalType, setShowModalType] = useState(null);
+
+   const handlelogoutClick = () => {
+      if (window.confirm("Are you sure that you want to logout?")) {
+         dispatch(logout())
+      }
+   }
 
    return (
       <Box className={styles.container}>
@@ -22,7 +30,7 @@ const Home = () => {
 
          <Box className={styles.buttonsContainer}>
             {isAuth ? 
-               <Button variant="contained" onClick={() => console.log("Logout")}>
+               <Button variant="contained" onClick={handlelogoutClick}>
                   Logout
                </Button>
                : 
