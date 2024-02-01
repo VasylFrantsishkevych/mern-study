@@ -2,9 +2,9 @@ import {Button, Typography, Box} from "@mui/material";
 
 import styles from "./Home.module.scss";
 import {Modals} from "../../components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {useDispatch, useSelector} from "react-redux";
-import { isAuthSelector, logout } from "../../redux/slices/auth";
+import { fetchUserData, isAuthSelector, logout } from "../../redux/slices/auth";
 
 const Home = () => {
    const dispatch = useDispatch();
@@ -18,6 +18,12 @@ const Home = () => {
          dispatch(logout())
       }
    }
+
+   useEffect(() => {
+      if (window.localStorage.getItem('token')) {
+         dispatch(fetchUserData())
+      }
+   }, [])
 
    return (
       <Box className={styles.container}>

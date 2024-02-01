@@ -19,6 +19,14 @@ export const loginisation = createAsyncThunk(
    }
 )
 
+export const fetchUserData = createAsyncThunk(
+   'fetchUserData',
+   async () => {
+      const {data} = await axios.get('/user')
+      return data
+   }
+)
+
 const initialState = {
    userEmail: null,
    status: 'loading',
@@ -57,6 +65,19 @@ const authSlice = createSlice({
             state.status = 'loaded'
          })
          .addCase(loginisation.rejected, (state) => {
+            state.userEmail = null
+            state.status = 'error'
+         })
+
+         .addCase(fetchUserData.pending, (state) => {
+            state.userEmail = null
+            state.status = 'loading'
+         })
+         .addCase(fetchUserData.fulfilled, (state, action) => {
+            state.userEmail = action.payload.email
+            state.status = 'loaded'
+         })
+         .addCase(fetchUserData.rejected, (state) => {
             state.userEmail = null
             state.status = 'error'
          })
